@@ -10,6 +10,27 @@ pipeline {
 
     stages {
 
+        stage('Checkout Tag') {
+            steps {
+                script {
+                    sh 'git fetch --tags'
+                    def tag = sh(script: 'git describe --tags $(git rev-list --tags --max-count=1)', returnStdout: true).trim()
+                    env.GIT_TAG = tag
+                    echo "Checked out tag ${env.GIT_TAG}"
+                }
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    sh 'docker build -t $DOCKER_IMAGE .'
+                }
+            }
+        }
+
+
+
         stage('Authenticate with GCP') {
             steps {
                 script {
