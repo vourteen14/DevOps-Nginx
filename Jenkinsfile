@@ -13,7 +13,7 @@ pipeline {
         stage('Push Docker Image to DockerHub') {
             steps {
                 script {
-                    docker.withRegistry('', DOCKER_CREDENTIALS) {
+                    docker.withRegistry('', credentials('DOCKER_CREDENTIALS')) {
                         sh 'docker push $DOCKER_IMAGE'
                     }
                 }
