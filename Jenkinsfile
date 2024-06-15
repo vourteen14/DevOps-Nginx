@@ -14,11 +14,12 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('', credentials('DOCKER_CREDENTIALS')) {
-                        sh 'docker push $DOCKER_IMAGE'
+                        sh 'docker ps -a'
                     }
                 }
             }
         }
+
         stage('Authenticate with GCP') {
             steps {
                 script {
