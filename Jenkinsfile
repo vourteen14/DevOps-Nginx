@@ -6,33 +6,15 @@ pipeline {
         GCP_PROJECT = credentials('gcp_project_id')
         GCP_ZONE = credentials('gcp_instance_zone')
         GCP_INSTANCE = credentials('gcp_instance_name')
+        GITHUB_BRANCH = "${GIT_BRANCH.split("/")[1]}"
     }
 
     stages {
 
-        stage('Build') {
-            steps {
-                sh 'printenv'
-            }
-        }
-
-        stage('Checkout Tag') {
-            steps {
-                script {
-                    dir('DevOps-Nginx') {
-                        sh 'git fetch --tags'
-                        def tag = sh(script: 'git describe --tags $(git rev-list --tags --max-count=1)', returnStdout: true).trim()
-                        env.GIT_TAG = tag
-                        echo "Checked out tag ${env.GIT_TAG}"
-                    }
-                }
-            }
-        }
-
         stage('Build Docker Image') {
             steps {
                 script {
-                    sh 'docker build -t $DOCKER_IMAGE .'
+                    sh 'docker build -t $DOCKER_IMAGE:$GITHUB_BRANCH .'
                 }
             }
         }
