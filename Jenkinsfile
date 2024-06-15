@@ -9,16 +9,6 @@ pipeline {
     }
 
     stages {
-        
-        stage('Push Docker Image to DockerHub') {
-            steps {
-                script {
-                    docker.withRegistry('', credentials('DOCKER_CREDENTIALS')) {
-                        sh 'docker ps -a'
-                    }
-                }
-            }
-        }
 
         stage('Authenticate with GCP') {
             steps {
