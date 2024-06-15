@@ -10,6 +10,12 @@ pipeline {
 
     stages {
 
+        stage('Build') {
+            steps {
+                sh 'printenv'
+            }
+        }
+
         stage('Checkout Tag') {
             steps {
                 script {
