@@ -55,7 +55,10 @@ pipeline {
                 withCredentials([file(credentialsId: 'GCLOUD_SERVICE_KEY', variable: 'GCLOUD_SERVICE_KEY')]) {
                     sh '''
                         gcloud compute ssh $GCP_INSTANCE --zone $GCP_ZONE --command "
-                        sudo docker ps -a
+                        sudo docker pull $DOCKER_IMAGE:$GITHUB_BRANCH &&
+                        sudo docker stop nginx || true &&
+                        sudo docker rm nginx || true &&
+                        sudo docker run -d --name nginx -p 8099:80 $DOCKER_IMAGE:$GITHUB_BRANCH
                         "
                     '''
                 }
