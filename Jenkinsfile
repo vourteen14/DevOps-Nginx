@@ -31,7 +31,8 @@ pipeline {
         stage('Push Image to Dockerhub') {
             steps {
                 script {
-                    docker.withRegistry('', DOCKER_CREDENTIALS) {
+                  withCredentials([usernamePassword(credentialsId: DOCKER_CREDENTIALS, usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                        sh "docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD"
                         sh 'docker push -u $DOCKER_USERNAME/$DOCKER_IMAGE:$GITHUB_BRANCH'
                         sh 'docker push -u $DOCKER_USERNAME/$DOCKER_IMAGE:latest'
                     }
