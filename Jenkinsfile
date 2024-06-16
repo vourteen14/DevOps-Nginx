@@ -6,7 +6,7 @@ pipeline {
         GCP_PROJECT = credentials('gcp_project_id')
         GCP_ZONE = credentials('gcp_instance_zone')
         GCP_INSTANCE = credentials('gcp_instance_name')
-        DOCKER_CREDENTIALS = credentials('DOCKER_CREDENTIALS')
+        DOCKER_CREDENTIALS = 'DOCKER_CREDENTIALS'
         GITHUB_BRANCH = "${GIT_BRANCH.split("/")[1]}"
     }
 
