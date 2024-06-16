@@ -12,7 +12,7 @@ pipeline {
 
     stages {    
 
-        stage('Build Docker Image') {
+        stage('Build Container Image') {
             steps {
                 script {
                     sh 'docker build -t $DOCKER_IMAGE:$GITHUB_BRANCH .'
@@ -20,7 +20,7 @@ pipeline {
             }
         }
 
-        stage('Tagging Docker image to latest') {
+        stage('Tagging Container Image') {
             steps {
                 script {
                     sh 'docker tag $DOCKER_IMAGE:$GITHUB_BRANCH $DOCKER_IMAGE:latest'
@@ -28,7 +28,7 @@ pipeline {
             }
         }
 
-        stage('Push Image to Dockerhub') {
+        stage('Push Container Image') {
             steps {
                 script {
                   withCredentials([usernamePassword(credentialsId: DOCKER_CREDENTIALS, usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
@@ -40,7 +40,7 @@ pipeline {
             }
         }
 
-        stage('Authenticate with GCP') {
+        stage('GCP Authentication') {
             steps {
                 script {
                     withCredentials([file(credentialsId: 'GCLOUD_SERVICE_KEY', variable: 'GCLOUD_SERVICE_KEY')]) {
@@ -50,7 +50,8 @@ pipeline {
                 }
             }
         }
-        stage('Run gcloud') {
+        
+        stage('GCP Deploy Container') {
             steps {
                 withCredentials([file(credentialsId: 'GCLOUD_SERVICE_KEY', variable: 'GCLOUD_SERVICE_KEY')]) {
                     sh '''
