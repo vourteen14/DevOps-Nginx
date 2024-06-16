@@ -6,8 +6,7 @@ pipeline {
         GCP_PROJECT = credentials('gcp_project_id')
         GCP_ZONE = credentials('gcp_instance_zone')
         GCP_INSTANCE = credentials('gcp_instance_name')
-        DOCKER_USERNAME = credentials('jenkins-docker-username')
-        DOCKER_PASSWORD = credentials('jenkins-docker-key')
+        DOCKER_CREDENTIALS = credentials('DOCKER_CREDENTIALS')
         GITHUB_BRANCH = "${GIT_BRANCH.split("/")[1]}"
     }
 
@@ -40,8 +39,10 @@ pipeline {
         stage('Push Image to Dockerhub') {
             steps {
                 script {
-                    sh 'docker push -u $DOCKER_USERNAME/$DOCKER_IMAGE:$GITHUB_BRANCH'
-                    sh 'docker push -u $DOCKER_USERNAME/$DOCKER_IMAGE:latest'
+                    docker.withRegistry('', DOCKER_CREDENTIALS) {
+                        sh 'docker push -u $DOCKER_USERNAME/$DOCKER_IMAGE:$GITHUB_BRANCH'
+                        sh 'docker push -u $DOCKER_USERNAME/$DOCKER_IMAGE:latest'
+                    }
                 }
             }
         }
