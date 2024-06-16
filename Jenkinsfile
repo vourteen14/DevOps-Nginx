@@ -10,15 +10,7 @@ pipeline {
         GITHUB_BRANCH = "${GIT_BRANCH.split("/")[1]}"
     }
 
-    stages {
-
-        stage('Login to Dockerhub') {
-            steps {
-                script {
-                    sh 'echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME'
-                }
-            }
-        }      
+    stages {    
 
         stage('Build Docker Image') {
             steps {
